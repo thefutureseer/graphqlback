@@ -1,0 +1,1 @@
+Run a simple gql query using node alone.
