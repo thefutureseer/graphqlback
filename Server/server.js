@@ -6,7 +6,7 @@
 //For an API that just returns “Hello world!”, 
 //we can put this code in a file named server.js
 
-var {buildSchema, graphql} = require("graphql");
+var {graphql, buildSchema} = require("graphql");
 
 //construct the schema / type definitions using gql :
 var schema = buildSchema(`
@@ -29,7 +29,7 @@ graphql({
   // Define the GraphQL query
   source: "{hello}",
   // Pass any resolver root value if needed
-  resolverRootValue,
+  rootValue: resolverRootValue,
 })
 // Once the GraphQL query is executed, handle the response
 .then(response => {
