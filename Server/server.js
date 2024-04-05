@@ -22,12 +22,17 @@ var resolverRootValue = {
   }
 }
 
-//run the gql query `{hello}` 
-//and get the response: "Yello world!"
+// Run the GraphQL query `{hello}`
 graphql({
+  // Provide the GraphQL schema
   schema,
+  // Define the GraphQL query
   source: "{hello}",
+  // Pass any resolver root value if needed
   resolverRootValue,
-}).then(response=>{
-   console.log(response);
 })
+// Once the GraphQL query is executed, handle the response
+.then(response => {
+  // Log the response to the console
+  console.log(response);
+});
