@@ -1,7 +1,7 @@
-var express = require("express")
+const express = require("express")
 var { createHandler } = require("graphql-http/lib/use/express")
-var { buildSchema } = require("graphql")
-var { ruruHTML } = require("ruru/server")
+const { buildSchema } = require("graphql")
+const { ruruHTML } = require("ruru/server")
  
 // Construct a schema, using GraphQL schema language
 var schema = buildSchema(`
