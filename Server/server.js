@@ -1,26 +1,60 @@
-const express = require("express");
-const { createHandler } = require("graphql-http/lib/use/express");
-const { ruruHTML } = require("ruru/server");
-const { typeDefs, root } = require('../graphql/index.js');
-const schema = typeDefs;
+const express = require('express');
+const { ApolloServer} = require('apollo-server-express');
+const {typeDefs, resolvers} = require('../graphql/index');
 
-var app = express();
+// Create an Express app
+const app = express();
 
-// Create and use the GraphQL handler.
-app.all(
-  "/graphql",
-  createHandler({
-    schema: schema,
-    rootValue: root,
-  })
-);
- 
-// Serve the GraphiQL IDE.
-app.get("/", (_req, res) => {
-  res.type("html")
-  res.end(ruruHTML({ endpoint: "/graphql" }))
-});
- 
-// Start the server at port
-app.listen(4000)
-console.log("Go to http://localhost:4000 but also running a GraphQL API server at http://localhost:4000/graphql");
+// Create an Apollo Server instance, passing in the schema and resolvers
+const server = new ApolloServer({ typeDefs, resolvers });
+
+// Start the Apollo Server before applying middleware
+async function startServer() {
+  await server.start();
+  server.applyMiddleware({ app });
+}
+
+startServer().then(() => {
+  // Start the Express server
+  const PORT = 4000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}${server.graphqlPath}`);
+  });
+}).catch(err => {
+  console.error('Error starting server:', err);
+});  
+
+  // // bring in typedefs and resolvers
+// const {typeDefs, resolvers} = require('../graphql/index');
+// const { ApolloServer } = require( '@apollo/server');
+// const { expressMiddleware } = require( '@apollo/server/express4');
+// const { ApolloServerPluginDrainHttpServer } = require( '@apollo/server/plugin/drainHttpServer');
+// const express = require( 'express');
+// const http = require( 'http');
+// const cors = require( 'cors');
+// const bodyParser = require( 'body-parser');
+
+// const app = express();
+// const httpServer = http.createServer(app);
+
+// (async () => {
+// // Set up Apollo Server
+// var server = new ApolloServer({
+//   typeDefs,
+//   resolvers,
+//   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+// });
+
+//   await server.start();
+  
+//   app.use(
+//     cors(),
+//     bodyParser.json(),
+//     expressMiddleware(server),
+//   );
+// })();
+
+// (async () =>{
+// await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
+// console.log(`🚀 Server ready at http://localhost:4000`);
+// })();
