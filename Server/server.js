@@ -22,4 +22,5 @@ startServer().then(() => {
   });
 }).catch(err => {
   console.error('Error starting server:', err);
-});  
+
+});
